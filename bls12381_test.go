@@ -1,9 +1,24 @@
 package miracl_wrapper
 
 import (
+	"encoding/hex"
 	"go.bryk.io/miracl/core/BLS12381"
 	"testing"
 )
+
+func TestReflectedCurve_BLS12381_Fp(t *testing.T) {
+	b := BLS12381.NewBIGints(BLS12381.CURVE_Order)
+	// 0000000000000000000000000000000073eda753299d7d483339d80809a1d80553bda402fffe5bfeffffffff00000001
+	println(b.ToString())
+	println(b.Nbits())
+	a, _ := hex.DecodeString("0000000000000000000000000000000073eda753299d7d483339d80809a1d80553bda402fffe5bfeffffffff00000001")
+	c := BLS12381.FromBytes(a)
+
+	c.Mod(b)
+
+	println(c.ToString())
+	println(c.Nbits())
+}
 
 func TestReflectedCurve_BLS12381_GetBGS(t *testing.T) {
 	r := NewCurveReflectWithBLS12381()

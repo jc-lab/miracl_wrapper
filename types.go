@@ -3,6 +3,8 @@ package miracl_wrapper
 type BIGInterface interface {
 	Invmodp(p BIGInterface)
 	ToBytes(b []byte)
+	ToString() string
+	Mod(p BIGInterface)
 }
 
 type ECPInterface interface {
