@@ -1,10 +1,13 @@
 package miracl_wrapper
 
 type BIGInterface interface {
+	Nbits() int
 	Invmodp(p BIGInterface)
 	ToBytes(b []byte)
 	ToString() string
 	Mod(p BIGInterface)
+	Plus(rhs BIGInterface) BIGInterface
+	Minus(rhs BIGInterface) BIGInterface
 }
 
 type ECPInterface interface {

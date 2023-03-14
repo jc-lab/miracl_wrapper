@@ -35,3 +35,23 @@ func TestBLS48581_Mod(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestBLS12381_Plus(t *testing.T) {
+	r := NewCurveReflectWithBLS12381()
+	a := r.FromBytes([]byte{1})
+	b := r.FromBytes([]byte{2})
+	c := a.Plus(b)
+	if c.ToString() != "030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" {
+		t.Fail()
+	}
+}
+
+func TestBLS12381_Minus(t *testing.T) {
+	r := NewCurveReflectWithBLS12381()
+	a := r.FromBytes([]byte{3})
+	b := r.FromBytes([]byte{1})
+	c := a.Minus(b)
+	if c.ToString() != "020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" {
+		t.Fail()
+	}
+}
