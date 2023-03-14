@@ -64,6 +64,20 @@ func TestReflectedCurve_BLS12381_ECPToBytesAndFromBytes(t *testing.T) {
 	}
 }
 
+func TestReflectedCurve_BLS12381_HasEcp2(t *testing.T) {
+	r := NewCurveReflectWithBLS12381()
+	if !r.HasEcp2() {
+		t.Fail()
+	}
+}
+
+func TestReflectedCurve_BLS12381_HasEcp8(t *testing.T) {
+	r := NewCurveReflectWithBLS12381()
+	if r.HasEcp8() {
+		t.Fail()
+	}
+}
+
 func TestReflectedCurve_BLS12381_ECP2ToBytesAndFromBytes(t *testing.T) {
 	r := NewCurveReflectWithBLS12381()
 	G := r.ECP2Generator()
@@ -97,6 +111,16 @@ func TestReflectedCurve_BLS12381_BIGFromBytes(t *testing.T) {
 	if b == nil {
 		t.Errorf("returned nil")
 	}
+}
+
+func TestReflectedCurve_BLS12381_G1mul(t *testing.T) {
+	r := NewCurveReflectWithBLS12381()
+
+	G := r.ECPGenerator()
+	a := r.BIGCurveOrder()
+
+	b := r.G1mul(G, a)
+	b.Affine()
 }
 
 func TestReflectedCurve_BLS12381_G2mul(t *testing.T) {

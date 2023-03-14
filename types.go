@@ -30,11 +30,14 @@ type CurveReflect interface {
 	CoreVerify(SIG []byte, M []byte, W []byte) int
 	ECPGenerator() ECPInterface
 	ECPFromBytes(b []byte) ECPInterface
+	HasEcp2() bool
 	ECP2Generator() ECP2Interface
 	ECP2FromBytes(b []byte) ECP2Interface
+	HasEcp8() bool
 	ECP8Generator() ECP8Interface
 	ECP8FromBytes(b []byte) ECP8Interface
 	FromBytes(b []byte) BIGInterface
+	G1mul(P ECPInterface, e BIGInterface) ECPInterface
 	G2mulEcp2(P ECP2Interface, e BIGInterface) ECP2Interface
 	G2mulEcp8(P ECP8Interface, e BIGInterface) ECP8Interface
 	BIGCurveOrder() BIGInterface
@@ -54,6 +57,7 @@ type CurveFunctions struct {
 	ECP8Generator   any
 	ECP8FromBytes   any
 	FromBytes       any
+	G1mul           any
 	G2mul           any
 	BIGCurveOrder   func() any
 	Modmul          any

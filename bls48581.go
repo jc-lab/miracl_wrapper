@@ -1,6 +1,8 @@
 package miracl_wrapper
 
-import "go.bryk.io/miracl/core/BLS48581"
+import (
+	"go.bryk.io/miracl/core/BLS48581"
+)
 
 func NewCurveReflectWithBLS48581() CurveReflect {
 	BLS48581.Init()
@@ -10,9 +12,12 @@ func NewCurveReflectWithBLS48581() CurveReflect {
 		KeyPairGenerate: BLS48581.KeyPairGenerate,
 		CoreSign:        BLS48581.Core_Sign,
 		CoreVerify:      BLS48581.Core_Verify,
+		ECPGenerator:    BLS48581.ECP_generator,
+		ECPFromBytes:    BLS48581.ECP_fromBytes,
 		ECP8Generator:   BLS48581.ECP8_generator,
 		ECP8FromBytes:   BLS48581.ECP8_fromBytes,
 		FromBytes:       BLS48581.FromBytes,
+		G1mul:           BLS48581.G1mul,
 		G2mul:           BLS48581.G2mul,
 		BIGCurveOrder: func() any {
 			return BLS48581.NewBIGints(BLS48581.CURVE_Order)

@@ -81,6 +81,30 @@ func TestReflectedCurve_BLS48581_BIGFromBytes(t *testing.T) {
 	}
 }
 
+func TestReflectedCurve_BLS48581_HasEcp2(t *testing.T) {
+	r := NewCurveReflectWithBLS48581()
+	if r.HasEcp2() {
+		t.Fail()
+	}
+}
+
+func TestReflectedCurve_BLS48581_HasEcp8(t *testing.T) {
+	r := NewCurveReflectWithBLS48581()
+	if !r.HasEcp8() {
+		t.Fail()
+	}
+}
+
+func TestReflectedCurve_BLS48581_G1mul(t *testing.T) {
+	r := NewCurveReflectWithBLS48581()
+
+	G := r.ECPGenerator()
+	a := r.BIGCurveOrder()
+
+	b := r.G1mul(G, a)
+	b.Affine()
+}
+
 func TestReflectedCurve_BLS48581_G2mul(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 

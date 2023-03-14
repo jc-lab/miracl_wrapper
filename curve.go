@@ -42,7 +42,7 @@ func (r reflectedCurve) CoreVerify(SIG []byte, M []byte, W []byte) int {
 
 func (r reflectedCurve) ECPGenerator() ECPInterface {
 	instance := reflect.ValueOf(r.input.ECPGenerator).Call([]reflect.Value{})
-	return &reflectedEcp8{
+	return &reflectedEcp{
 		instance: instance[0],
 	}
 }
@@ -54,6 +54,10 @@ func (r reflectedCurve) ECPFromBytes(b []byte) ECPInterface {
 	return &reflectedEcp8{
 		instance: ret[0],
 	}
+}
+
+func (r reflectedCurve) HasEcp2() bool {
+	return r.input.ECP2Generator != nil
 }
 
 func (r reflectedCurve) ECP2Generator() ECP2Interface {
@@ -70,6 +74,10 @@ func (r reflectedCurve) ECP2FromBytes(b []byte) ECP2Interface {
 	return &reflectedEcp8{
 		instance: ret[0],
 	}
+}
+
+func (r reflectedCurve) HasEcp8() bool {
+	return r.input.ECP8Generator != nil
 }
 
 func (r reflectedCurve) ECP8Generator() ECP8Interface {
@@ -93,6 +101,16 @@ func (r reflectedCurve) FromBytes(b []byte) BIGInterface {
 		reflect.ValueOf(b),
 	})
 	return &reflectedBig{
+		instance: ret[0],
+	}
+}
+
+func (r reflectedCurve) G1mul(P ECPInterface, e BIGInterface) ECPInterface {
+	ret := reflect.ValueOf(r.input.G1mul).Call([]reflect.Value{
+		P.(*reflectedEcp).instance,
+		e.(*reflectedBig).instance,
+	})
+	return &reflectedEcp{
 		instance: ret[0],
 	}
 }
