@@ -1,55 +1,35 @@
-package miracl_wrapper_test
+package miracl_wrapper
 
 import (
-	"github.com/jc-lab/miracl_wrapper"
 	"go.bryk.io/miracl/core/BLS48581"
 	"testing"
 )
 
-func NewCurveReflectWithBLS48581() miracl_wrapper.CurveReflect {
-	BLS48581.Init()
-	return miracl_wrapper.NewCurveReflect(&miracl_wrapper.CurveFunctions{
-		BGS:             BLS48581.BGS,
-		BFS:             BLS48581.BFS,
-		KeyPairGenerate: BLS48581.KeyPairGenerate,
-		CoreSign:        BLS48581.Core_Sign,
-		CoreVerify:      BLS48581.Core_Verify,
-		ECP8Generator:   BLS48581.ECP8_generator,
-		ECP8FromBytes:   BLS48581.ECP8_fromBytes,
-		FromBytes:       BLS48581.FromBytes,
-		G2mul:           BLS48581.G2mul,
-		BIGCurveOrder: func() any {
-			return BLS48581.NewBIGints(BLS48581.CURVE_Order)
-		},
-		Modmul: BLS48581.Modmul,
-	})
-}
-
-func TestReflectedCurve_GetBGSWithBLS48581(t *testing.T) {
+func TestReflectedCurve_BLS48581_GetBGS(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 	if r.GetBGS() != BLS48581.BGS {
 		t.Errorf("expected %d, got %d", BLS48581.BGS, r.GetBGS())
 	}
 }
 
-func TestReflectedCurve_GetBFSWithBLS48581(t *testing.T) {
+func TestReflectedCurve_BLS48581_GetBFS(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 	if r.GetBFS() != BLS48581.BFS {
 		t.Errorf("expected %d, got %d", BLS48581.BFS, r.GetBFS())
 	}
 }
 
-func TestReflectedCurve_GetG1SWithBLS48581(t *testing.T) {
+func TestReflectedCurve_BLS48581_GetG1S(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 	_ = r.GetG1S()
 }
 
-func TestReflectedCurve_GetG2SWithBLS48581(t *testing.T) {
+func TestReflectedCurve_BLS48581_GetG2S(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 	_ = r.GetG2S()
 }
 
-func TestReflectedCurve_KeyPairGenerateWithBLS48581(t *testing.T) {
+func TestReflectedCurve_BLS48581_KeyPairGenerate(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 	ikm := make([]byte, 16)
 	S := make([]byte, r.GetBGS())
@@ -61,12 +41,12 @@ func TestReflectedCurve_KeyPairGenerateWithBLS48581(t *testing.T) {
 	}
 }
 
-func TestReflectedCurve_ECP8GeneratorWithBLS48581(t *testing.T) {
+func TestReflectedCurve_BLS48581_ECP8Generator(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 	r.ECP8Generator()
 }
 
-func TestReflectedCurve_ECP8ToBytesAndFromBytesWithBLS48581(t *testing.T) {
+func TestReflectedCurve_BLS48581_ECP8ToBytesAndFromBytes(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 	G := r.ECP8Generator()
 
@@ -79,7 +59,7 @@ func TestReflectedCurve_ECP8ToBytesAndFromBytesWithBLS48581(t *testing.T) {
 	}
 }
 
-func TestReflectedCurve_BIGCurveOrderWithBLS48581(t *testing.T) {
+func TestReflectedCurve_BLS48581_BIGCurveOrder(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 	r.BIGCurveOrder()
 	if r.GetBGS() != BLS48581.BGS {
@@ -87,7 +67,7 @@ func TestReflectedCurve_BIGCurveOrderWithBLS48581(t *testing.T) {
 	}
 }
 
-func TestReflectedCurve_BIGFromBytesWithBLS48581(t *testing.T) {
+func TestReflectedCurve_BLS48581_BIGFromBytes(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 	a := r.BIGCurveOrder()
 
@@ -101,17 +81,17 @@ func TestReflectedCurve_BIGFromBytesWithBLS48581(t *testing.T) {
 	}
 }
 
-func TestReflectedCurve_G2mulWithBLS48581(t *testing.T) {
+func TestReflectedCurve_BLS48581_G2mul(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 
 	G := r.ECP8Generator()
 	a := r.BIGCurveOrder()
 
-	b := r.G2mul(G, a)
+	b := r.G2mulEcp8(G, a)
 	b.Affine()
 }
 
-func TestReflectedCurve_ModmulWithBLS48581(t *testing.T) {
+func TestReflectedCurve_BLS48581_Modmul(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 
 	a := r.BIGCurveOrder()
@@ -119,7 +99,7 @@ func TestReflectedCurve_ModmulWithBLS48581(t *testing.T) {
 	b.Invmodp(b)
 }
 
-func TestReflectedCurve_CoreSignAndCoreVerify(t *testing.T) {
+func TestReflectedCurve_BLS48581_CoreSignAndCoreVerify(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 	ikm := make([]byte, 16)
 	S := make([]byte, r.GetBGS())
@@ -144,7 +124,7 @@ func TestReflectedCurve_CoreSignAndCoreVerify(t *testing.T) {
 	}
 }
 
-func TestReflectedCurve_CoreSignAndCoreVerify_WithDifferentMessage(t *testing.T) {
+func TestReflectedCurve_BLS48581_CoreSignAndCoreVerify_WithDifferentMessage(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 	ikm := make([]byte, 16)
 	S := make([]byte, r.GetBGS())

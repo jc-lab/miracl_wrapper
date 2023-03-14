@@ -40,6 +40,38 @@ func (r reflectedCurve) CoreVerify(SIG []byte, M []byte, W []byte) int {
 	return r.input.CoreVerify(SIG, M, W)
 }
 
+func (r reflectedCurve) ECPGenerator() ECPInterface {
+	instance := reflect.ValueOf(r.input.ECPGenerator).Call([]reflect.Value{})
+	return &reflectedEcp8{
+		instance: instance[0],
+	}
+}
+
+func (r reflectedCurve) ECPFromBytes(b []byte) ECPInterface {
+	ret := reflect.ValueOf(r.input.ECPFromBytes).Call([]reflect.Value{
+		reflect.ValueOf(b),
+	})
+	return &reflectedEcp8{
+		instance: ret[0],
+	}
+}
+
+func (r reflectedCurve) ECP2Generator() ECP2Interface {
+	instance := reflect.ValueOf(r.input.ECP2Generator).Call([]reflect.Value{})
+	return &reflectedEcp2{
+		instance: instance[0],
+	}
+}
+
+func (r reflectedCurve) ECP2FromBytes(b []byte) ECP2Interface {
+	ret := reflect.ValueOf(r.input.ECP2FromBytes).Call([]reflect.Value{
+		reflect.ValueOf(b),
+	})
+	return &reflectedEcp8{
+		instance: ret[0],
+	}
+}
+
 func (r reflectedCurve) ECP8Generator() ECP8Interface {
 	instance := reflect.ValueOf(r.input.ECP8Generator).Call([]reflect.Value{})
 	return &reflectedEcp8{
@@ -65,7 +97,17 @@ func (r reflectedCurve) FromBytes(b []byte) BIGInterface {
 	}
 }
 
-func (r reflectedCurve) G2mul(P ECP8Interface, e BIGInterface) ECP8Interface {
+func (r reflectedCurve) G2mulEcp2(P ECP2Interface, e BIGInterface) ECP2Interface {
+	ret := reflect.ValueOf(r.input.G2mul).Call([]reflect.Value{
+		P.(*reflectedEcp2).instance,
+		e.(*reflectedBig).instance,
+	})
+	return &reflectedEcp2{
+		instance: ret[0],
+	}
+}
+
+func (r reflectedCurve) G2mulEcp8(P ECP8Interface, e BIGInterface) ECP8Interface {
 	ret := reflect.ValueOf(r.input.G2mul).Call([]reflect.Value{
 		P.(*reflectedEcp8).instance,
 		e.(*reflectedBig).instance,

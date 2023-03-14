@@ -1,8 +1,8 @@
-package miracl_wrapper_test
+package miracl_wrapper
 
 import "testing"
 
-func TestToBytesBLS48581(t *testing.T) {
+func TestEcp8_BLS48581_ToBytes(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 	G := r.ECP8Generator()
 
@@ -10,7 +10,7 @@ func TestToBytesBLS48581(t *testing.T) {
 	G.ToBytes(buffer, true)
 }
 
-func TestAffineWithBLS48581(t *testing.T) {
+func TestEcp8_BLS48581_Affine(t *testing.T) {
 	r := NewCurveReflectWithBLS48581()
 	G := r.ECP8Generator()
 

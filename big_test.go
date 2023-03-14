@@ -1,4 +1,4 @@
-package miracl_wrapper_test
+package miracl_wrapper
 
 import "testing"
 

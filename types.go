@@ -5,6 +5,16 @@ type BIGInterface interface {
 	ToBytes(b []byte)
 }
 
+type ECPInterface interface {
+	ToBytes(b []byte, compress bool)
+	Affine()
+}
+
+type ECP2Interface interface {
+	ToBytes(b []byte, compress bool)
+	Affine()
+}
+
 type ECP8Interface interface {
 	ToBytes(b []byte, compress bool)
 	Affine()
@@ -18,10 +28,15 @@ type CurveReflect interface {
 	KeyPairGenerate(IKM []byte, S []byte, W []byte) int
 	CoreSign(SIG []byte, M []byte, S []byte) int
 	CoreVerify(SIG []byte, M []byte, W []byte) int
+	ECPGenerator() ECPInterface
+	ECPFromBytes(b []byte) ECPInterface
+	ECP2Generator() ECP2Interface
+	ECP2FromBytes(b []byte) ECP2Interface
 	ECP8Generator() ECP8Interface
 	ECP8FromBytes(b []byte) ECP8Interface
 	FromBytes(b []byte) BIGInterface
-	G2mul(P ECP8Interface, e BIGInterface) ECP8Interface
+	G2mulEcp2(P ECP2Interface, e BIGInterface) ECP2Interface
+	G2mulEcp8(P ECP8Interface, e BIGInterface) ECP8Interface
 	BIGCurveOrder() BIGInterface
 	Modmul(a1 BIGInterface, b1 BIGInterface, m BIGInterface) BIGInterface
 }
@@ -32,6 +47,10 @@ type CurveFunctions struct {
 	KeyPairGenerate func(IKM []byte, S []byte, W []byte) int
 	CoreSign        func(SIG []byte, M []byte, S []byte) int
 	CoreVerify      func(SIG []byte, M []byte, W []byte) int
+	ECPGenerator    any
+	ECPFromBytes    any
+	ECP2Generator   any
+	ECP2FromBytes   any
 	ECP8Generator   any
 	ECP8FromBytes   any
 	FromBytes       any
